@@ -212,7 +212,7 @@ int *leftRotation(int rows, int col, int *img)
 int *saltAndPepper(int rows, int col, int maxValue, int *img)
 {
     int *imgResult = new int[rows*col];
-    for (int *p1 = imgResult; p1 <= imgResult + (col*rows); p1++, img++)
+    for (int *p1 = imgResult; p1 < imgResult + (col*rows); p1++, img++)
     {
         int v1 = rand() % 100;
         if (v1 == 0)
@@ -227,14 +227,16 @@ int *saltAndPepper(int rows, int col, int maxValue, int *img)
     return imgResult;
 }
 
-int *padding(int rows, int col, int maxValue, int *img, int dimension)
+int *padding(int rows, int col, int maxValue, int *img, int dimension, int *rows_result, int *col_result)
 {
     int colResult = (col+2*dimension), rowsResult = (rows+2*dimension); 
     int *imgResult = new int[colResult*rowsResult];
     int *p1, *p2, *q1, *q2;
+    *rows_result = rows + 2*dimension;
+    *col_result = col + 2*dimension;
     for (p1 = imgResult; p1 < imgResult + (colResult*rowsResult); p1++)
     {
-        *p1 = maxValue;
+        *p1 = 0;
     } 
   
     for (p1 = imgResult + (dimension*colResult) + dimension, p2 = img; p1 < imgResult + (dimension*colResult) + dimension + col; p1++, p2++)
@@ -248,18 +250,80 @@ int *padding(int rows, int col, int maxValue, int *img, int dimension)
     return imgResult;
 }
 
+int *selectKernel(int rows, int col, int *img, int dimension, int i, int j)
+{
+    int *result = new int[9];
+    int *aux = result;
+    int *center = img + (col*i+j);
+    int *leftElem = center - dimension - col;
+    int *rightElem = center + dimension - col;
+    for (int *p1 = leftElem, *p2 = rightElem; p1 <= leftElem + (dimension+1)*col; p1 += col, p2 += col)
+    {
+        for (int *q1 = p1, *q2 = p2; q1 <= q2; q1++, aux++)
+        {
+            cout << *q1 << " ";
+            *aux = *q1;
+        }
+        cout << endl;
+    }
+    return result;
+}
+
+void bubbleSort(int *a, int len)
+{
+    int aux;
+    for (int i = 0; i < len; i++)
+    {
+        for (int j = i + 1; j < len; j++)
+        {
+            if (a[j] < a[i])
+            {
+                aux = a[i];
+                a[i] = a[j];
+                a[j] = aux;
+            }
+        }
+    }
+}
+
+int *solveSaltAndPepper(int rows, int col, int maxValue, int *img, int dimension, int *rows_result, int *col_result)
+{
+    int *result;
+    int *imgResult = result;
+    int *imgPadding = padding(rows, col, maxValue, img, dimension, rows_result, col_result);
+    float pixelValue;
+    int *kernel;
+    int kernelLen = (2*dimension+1)*(2*dimension+1);
+    for (int i = dimension; i <= rows; i++)
+    {
+        for (int j = dimension; j <= col; j++)
+        {
+            cout << "par: [ " << i << " ][ " << j << " ]" << endl; 
+            pixelValue = 0;
+            kernel = selectKernel(*rows_result, *col_result, imgPadding, dimension, i, j);
+            bubbleSort(kernel, kernelLen);
+            for (int *aux = kernel; aux < kernel + kernelLen; aux++)
+            {
+                pixelValue += *aux;
+            }
+
+            *result = pixelValue/kernelLen;
+            result++;
+        }
+    }
+    return imgResult;
+}
+
 int main(void)
 {
     int rows, col, maxValue;
-    getRowsCol("totem.pgm", &rows, &col, &maxValue);
+    int rows_result, col_result;
+    getRowsCol("teste.pgm", &rows, &col, &maxValue);
     cout << rows << " " << col << endl;
     int *img = new int[rows * col];
     int *imgResult = new int[rows * col];
-    int *imgPadding = new int[(col+2)*(rows+2)];
-    int *imgPadding2 = new int[(col+4)*(rows+4)];
-    int *imgPadding3 = new int[(col+6)*(rows+6)];
-
-    readImg("totem.pgm", rows, col, img);
+    int *imgPadding;
+    readImg("teste.pgm", rows, col, img);
 
     imgResult = negative(rows, col, img);
     writeImg("negative.pgm", rows, col, maxValue, imgResult);
@@ -288,14 +352,11 @@ int main(void)
     imgResult = saltAndPepper(rows, col, maxValue, img);
     writeImg("salt&pepper.pgm", rows, col, maxValue, imgResult);
 
-    imgPadding = padding(rows, col, maxValue, img, 1);
-    writeImg("padding.pgm", rows+2, col+2, maxValue, imgPadding);
+    imgPadding = padding(rows, col, maxValue, imgResult, 1, &rows_result, &col_result);
+    writeImg("paddingSalt&Pepper.pgm", rows_result, col_result, maxValue, imgPadding);
 
-    imgPadding2 = padding(rows, col, maxValue, img, 2);
-    writeImg("padding2.pgm", rows+4, col+4, maxValue, imgPadding2);
-
-    imgPadding3 = padding(rows, col, maxValue, img, 3);
-    writeImg("padding3.pgm", rows+6, col+6, maxValue, imgPadding3);
+    imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 1, &rows_result, &col_result);
+    writeImg("solveSalt&Pepper.pgm", rows, col, maxValue, imgPadding);
 
     return 0;
 }
