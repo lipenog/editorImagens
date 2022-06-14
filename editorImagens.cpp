@@ -269,14 +269,14 @@ int *selectKernel(int rows, int col, int *img, int dimension, int *center, int l
 void bubbleSort(int *a, int len)
 {
     int aux;
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < len - 1; i++)
     {
-        for (int j = i + 1; j < len; j++)
+        for (int j = 0; j < len - i - 1; j++)
         {
-            if (a[j] < a[i])
+            if (a[j] < a[j+1])
             {
-                aux = a[i];
-                a[i] = a[j];
+                aux = a[j+1];
+                a[j+1] = a[j];
                 a[j] = aux;
             }
         }
@@ -398,9 +398,13 @@ int main(void)
 
     imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 2, &rows_result, &col_result);
     writeImg("solveSalt&Pepper2.pgm", rows, col, maxValue, imgPadding);
+    // 10:34
+    //imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 10, &rows_result, &col_result);
+    //writeImg("solveSalt&Pepper3.pgm", rows, col, maxValue, imgPadding);
+    // 10:36
 
+    //10:37
     imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 20, &rows_result, &col_result);
-    writeImg("solveSalt&Pepper3.pgm", rows, col, maxValue, imgPadding);
-
+    writeImg("solveSalt&Pepper4.pgm", rows, col, maxValue, imgPadding);
     return 0;
 }
