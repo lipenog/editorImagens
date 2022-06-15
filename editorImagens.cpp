@@ -100,7 +100,7 @@ void writeImg(string nameFile, int rows, int col, int maxValue, int *img)
 
 int *negative(int rows, int col, int *img)
 {
-    int *imgResult = new int[col*rows];
+    int *imgResult = new int[col * rows];
     int *result = imgResult;
 
     for (int i = 0; i < rows * col; i++)
@@ -115,7 +115,7 @@ int *negative(int rows, int col, int *img)
 
 int *levelOfLight(int rows, int col, int maxValue, int *img, float levelOfLight)
 {
-    int *imgResult = new int[col*rows];
+    int *imgResult = new int[col * rows];
     int *result = imgResult;
 
     for (int i = 0; i < rows * col; i++)
@@ -141,12 +141,12 @@ int *levelOfLight(int rows, int col, int maxValue, int *img, float levelOfLight)
 
 int *transpose(int rows, int col, int *img)
 {
-    int *imgResult = new int[col*rows];
+    int *imgResult = new int[col * rows];
 
     int *p1 = imgResult;
     int *p2 = img;
     int *q1, *q2;
-    for (; p1 < imgResult + (col*rows) - rows; p1 += rows, p2++)
+    for (; p1 < imgResult + (col * rows) - rows; p1 += rows, p2++)
     {
         for (q1 = p1, q2 = p2; q1 <= p1 + rows; q1++, q2 += col)
         {
@@ -159,7 +159,7 @@ int *transpose(int rows, int col, int *img)
 
 int *horizontalRotation(int rows, int col, int *img)
 {
-    int *imgResult = new int[col*rows];
+    int *imgResult = new int[col * rows];
 
     int *p1 = imgResult;
     int *p2 = img + (col * rows) - col;
@@ -178,7 +178,7 @@ int *horizontalRotation(int rows, int col, int *img)
 
 int *verticalRotation(int rows, int col, int *img)
 {
-    int *imgResult = new int[col*rows];
+    int *imgResult = new int[col * rows];
 
     int *p1 = imgResult;
     int *p2 = img + col - 1;
@@ -197,30 +197,34 @@ int *verticalRotation(int rows, int col, int *img)
 
 int *rightRotation(int rows, int col, int *img)
 {
-    int *result = new int[rows*col];
+    int *result = new int[rows * col];
     result = verticalRotation(col, rows, transpose(rows, col, img));
     return result;
 }
 
 int *leftRotation(int rows, int col, int *img)
 {
-    int *result = new int[rows*col];
+    int *result = new int[rows * col];
     result = horizontalRotation(col, rows, transpose(rows, col, img));
     return result;
 }
 
 int *saltAndPepper(int rows, int col, int maxValue, int *img)
 {
-    int *imgResult = new int[rows*col];
-    for (int *p1 = imgResult; p1 < imgResult + (col*rows); p1++, img++)
+    int *imgResult = new int[rows * col];
+    for (int *p1 = imgResult; p1 < imgResult + (col * rows); p1++, img++)
     {
         int v1 = rand() % 100;
         if (v1 == 0)
         {
             *p1 = 0;
-        } else if (v1 == 10) {
+        }
+        else if (v1 == 10)
+        {
             *p1 = maxValue;
-        } else {
+        }
+        else
+        {
             *p1 = *img;
         }
     }
@@ -229,19 +233,19 @@ int *saltAndPepper(int rows, int col, int maxValue, int *img)
 
 int *padding(int rows, int col, int maxValue, int *img, int dimension, int *rows_result, int *col_result)
 {
-    int colResult = (col+2*dimension), rowsResult = (rows+2*dimension); 
-    int *imgResult = new int[colResult*rowsResult];
+    int colResult = (col + 2 * dimension), rowsResult = (rows + 2 * dimension);
+    int *imgResult = new int[colResult * rowsResult];
     int *p1, *p2, *q1, *q2;
-    *rows_result = rows + 2*dimension;
-    *col_result = col + 2*dimension;
-    for (p1 = imgResult; p1 < imgResult + (colResult*rowsResult); p1++)
+    *rows_result = rows + 2 * dimension;
+    *col_result = col + 2 * dimension;
+    for (p1 = imgResult; p1 < imgResult + (colResult * rowsResult); p1++)
     {
         *p1 = 0;
-    } 
-  
-    for (p1 = imgResult + (dimension*colResult) + dimension, p2 = img; p1 < imgResult + (dimension*colResult) + dimension + col; p1++, p2++)
+    }
+
+    for (p1 = imgResult + (dimension * colResult) + dimension, p2 = img; p1 < imgResult + (dimension * colResult) + dimension + col; p1++, p2++)
     {
-        for (q1 = p1, q2 = p2; q1 < p1 + (colResult*rowsResult) - 2*dimension*colResult; q1 += colResult, q2 += col)
+        for (q1 = p1, q2 = p2; q1 < p1 + (colResult * rowsResult) - 2 * dimension * colResult; q1 += colResult, q2 += col)
         {
             *q1 = *q2;
         }
@@ -256,7 +260,7 @@ int *selectKernel(int rows, int col, int *img, int dimension, int *center, int l
     int *aux = result;
     int *leftElem = center - dimension - col;
     int *rightElem = center + dimension - col;
-    for (int *p1 = leftElem, *p2 = rightElem; p1 <= leftElem + (dimension+1)*col; p1 += col, p2 += col)
+    for (int *p1 = leftElem, *p2 = rightElem; p1 <= leftElem + (dimension + 1) * col; p1 += col, p2 += col)
     {
         for (int *q1 = p1, *q2 = p2; q1 <= q2; q1++, aux++)
         {
@@ -273,10 +277,10 @@ void bubbleSort(int *a, int len)
     {
         for (int j = 0; j < len - i - 1; j++)
         {
-            if (a[j] < a[j+1])
+            if (a[j] < a[j + 1])
             {
-                aux = a[j+1];
-                a[j+1] = a[j];
+                aux = a[j + 1];
+                a[j + 1] = a[j];
                 a[j] = aux;
             }
         }
@@ -285,16 +289,15 @@ void bubbleSort(int *a, int len)
 
 int *blur(int rows, int col, int maxValue, int *img, int dimension, int *rowsResult, int *colResult)
 {
-    int *result = new int[rows*col];
+    int *result = new int[rows * col];
     int *imgResult = result;
     int *imgPadding = padding(rows, col, maxValue, img, dimension, rowsResult, colResult);
     float pixelValue;
-    int kernelLen = (2*dimension+1)*(2*dimension+1);
+    int kernelLen = (2 * dimension + 1) * (2 * dimension + 1);
     int *kernel = new int[kernelLen];
 
-    int *leftUpPoint = imgPadding + (dimension**colResult) + dimension;
-    int *leftDownPoint = (imgPadding + (*rowsResult**colResult) - *colResult) - dimension**colResult + dimension;
-
+    int *leftUpPoint = imgPadding + (dimension * *colResult) + dimension;
+    int *leftDownPoint = (imgPadding + (*rowsResult * *colResult) - *colResult) - dimension * *colResult + dimension;
 
     for (int *p1 = leftUpPoint, *p2 = leftDownPoint; p1 != p2; p1 += *colResult)
     {
@@ -306,7 +309,7 @@ int *blur(int rows, int col, int maxValue, int *img, int dimension, int *rowsRes
             {
                 pixelValue += *aux;
             }
-            *result = pixelValue/kernelLen;
+            *result = pixelValue / kernelLen;
             result++;
         }
     }
@@ -316,15 +319,14 @@ int *blur(int rows, int col, int maxValue, int *img, int dimension, int *rowsRes
 
 int *solveSaltAndPepper(int rows, int col, int maxValue, int *img, int dimension, int *rowsResult, int *colResult)
 {
-    int *result = new int[rows*col];
+    int *result = new int[rows * col];
     int *imgResult = result;
     int *imgPadding = padding(rows, col, maxValue, img, dimension, rowsResult, colResult);
-    int kernelLen = (2*dimension+1)*(2*dimension+1);
+    int kernelLen = (2 * dimension + 1) * (2 * dimension + 1);
     int *kernel = new int[kernelLen];
 
-    int *leftUpPoint = imgPadding + (dimension**colResult) + dimension;
-    int *leftDownPoint = (imgPadding + (*rowsResult**colResult) - *colResult) - dimension**colResult + dimension;
-
+    int *leftUpPoint = imgPadding + (dimension * *colResult) + dimension;
+    int *leftDownPoint = (imgPadding + (*rowsResult * *colResult) - *colResult) - dimension * *colResult + dimension;
 
     for (int *p1 = leftUpPoint, *p2 = leftDownPoint; p1 != p2; p1 += *colResult)
     {
@@ -332,7 +334,42 @@ int *solveSaltAndPepper(int rows, int col, int maxValue, int *img, int dimension
         {
             kernel = selectKernel(*rowsResult, *colResult, imgPadding, dimension, q1, kernelLen);
             bubbleSort(kernel, kernelLen);
-            *result = kernel[kernelLen/2];
+            *result = kernel[kernelLen / 2];
+            result++;
+        }
+    }
+
+    return imgResult;
+}
+
+int *fliters(int rows, int col, int maxValue, int *img, int dimension, int *rowsResult, int *colResult, int *filter, int filterSum)
+{
+    int *result = new int[rows * col];
+    int *imgResult = result;
+    int *imgPadding = padding(rows, col, maxValue, img, dimension, rowsResult, colResult);
+    int kernelLen = (2 * dimension + 1) * (2 * dimension + 1);
+    int *kernel = new int[kernelLen];
+    int pixelValue;
+
+    int *leftUpPoint = imgPadding + (dimension * *colResult) + dimension;
+    int *leftDownPoint = (imgPadding + (*rowsResult * *colResult) - *colResult) - dimension * *colResult + dimension;
+    
+    for (int *p1 = leftUpPoint, *p2 = leftDownPoint; p1 != p2; p1 += *colResult)
+    {
+        for (int *q1 = p1; q1 < p1 + col; q1++)
+        {
+            pixelValue = 0;
+            kernel = selectKernel(*rowsResult, *colResult, imgPadding, dimension, q1, kernelLen);
+            for (int *l1 = kernel, *l2 = filter; l1 < kernel + kernelLen; l1++, l2++)
+            {
+                pixelValue += *l1 * *l2;
+            }
+            *result = pixelValue/filterSum;
+            if (*result > maxValue){
+                *result = maxValue;
+            } else if (*result < 0){
+                *result = 0;
+            }
             result++;
         }
     }
@@ -344,13 +381,24 @@ int main(void)
 {
     int rows, col, maxValue;
     int rows_result, col_result;
+
+
     getRowsCol("mulher.pgm", &rows, &col, &maxValue);
+
+
     cout << rows << " " << col << endl;
+
+
     int *img = new int[rows * col];
     int *imgResult = new int[rows * col];
     int *imgPadding;
+
+
+    int filterA[9] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
+    int filterB[9] = {0,0,0,0,0,1,0,0,0};
+
     readImg("mulher.pgm", rows, col, img);
-    
+
     imgResult = negative(rows, col, img);
     writeImg("negative.pgm", rows, col, maxValue, imgResult);
 
@@ -374,7 +422,7 @@ int main(void)
 
     imgResult = leftRotation(rows, col, img);
     writeImg("leftR.pgm", col, rows, maxValue, imgResult);
-    
+
     imgPadding = padding(rows, col, maxValue, img, 2, &rows_result, &col_result);
     writeImg("padding.pgm", rows_result, col_result, maxValue, imgPadding);
 
@@ -387,9 +435,9 @@ int main(void)
     imgPadding = blur(rows, col, maxValue, img, 3, &rows_result, &col_result);
     writeImg("blur9x9.pgm", rows, col, maxValue, imgPadding);
 
-    imgPadding = blur(rows, col, maxValue, img, 20, &rows_result, &col_result);
-    writeImg("blur20.pgm", rows, col, maxValue, imgPadding);
-    
+    //imgPadding = blur(rows, col, maxValue, img, 20, &rows_result, &col_result);
+    //writeImg("blur20.pgm", rows, col, maxValue, imgPadding);
+
     imgResult = saltAndPepper(rows, col, maxValue, img);
     writeImg("salt&pepper.pgm", rows, col, maxValue, imgResult);
 
@@ -399,12 +447,20 @@ int main(void)
     imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 2, &rows_result, &col_result);
     writeImg("solveSalt&Pepper2.pgm", rows, col, maxValue, imgPadding);
     // 10:34
-    //imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 10, &rows_result, &col_result);
-    //writeImg("solveSalt&Pepper3.pgm", rows, col, maxValue, imgPadding);
+    // imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 10, &rows_result, &col_result);
+    // writeImg("solveSalt&Pepper3.pgm", rows, col, maxValue, imgPadding);
     // 10:36
 
-    //10:37
-    imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 20, &rows_result, &col_result);
-    writeImg("solveSalt&Pepper4.pgm", rows, col, maxValue, imgPadding);
+    // 10:37
+    //imgPadding = solveSaltAndPepper(rows, col, maxValue, imgResult, 20, &rows_result, &col_result);
+    //writeImg("solveSalt&Pepper4.pgm", rows, col, maxValue, imgPadding);
+    // 10:53
+
+    imgResult = fliters(rows, col, maxValue, img, 1, &rows_result, &col_result, filterA, 9);
+    writeImg("filterA.pgm", rows, col, maxValue, imgResult);
+
+    imgResult = fliters(rows, col, maxValue, img, 1, &rows_result, &col_result, filterB, 9);
+    writeImg("filterB.pgm", rows, col, maxValue, imgResult);
+
     return 0;
 }
